@@ -1,0 +1,43 @@
+calc_mtld <- function(text){
+  text_reversed <- rev(text)
+  f_mtld <- mtld_funct(text)
+  b_mtld <- mtld_funct(text_reversed)
+  t_mtld <- c(f_mtld, b_mtld)
+  mean(t_mtld)
+}
+
+
+mtld_funct <- function(word_array){
+  current_ttr <-- 1.0
+  token_count <- 0
+  type_count <- 0
+  types_list <- c()
+  factors <- 0.0
+  ttr_threshold <- 0.72
+  
+  
+  for (token in word_array){
+    token_count <- token_count + 1
+    if (!(token %in% types_list)) {
+      type_count <- type_count + 1
+      types_list <- c(types_list, token) 
+    }
+    
+    current_ttr <- type_count / token_count
+    cat("This text is", length(word_array), "words long:  Word", token, "number", token_count, "type count", type_count, "TTR", current_ttr, ".\n")
+    if (current_ttr <= ttr_threshold && token_count > 5){
+      factors <- factors + 1
+      token_count <- 0
+      type_count <- 0
+      types_list <- c()
+      current_ttr <- 1.0 }
+  }
+  excess <- 1.0 - current_ttr
+  excess_val <- 1.0 - ttr_threshold
+  factors <- factors + (excess / excess_val)
+  
+  if (factors > 0){
+    return(length(word_array) / factors)
+  }
+  return(-1)
+}
